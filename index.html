@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f2ea">
+  <meta name="description" content="A personal shelf of thoughtful, useful open-source apps worth knowing about.">
+  <title>Good software — Open Shelf</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f2ea;
+      --ink: #17231d;
+      --muted: #657168;
+      --line: #d9ddd4;
+      --green: #b9f36a;
+      --green-dark: #28441e;
+      --panel: #fffefa;
+      --serif: Georgia, "Times New Roman", serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); }
+    a { color: inherit; }
+    button, input { font: inherit; }
+    .wrap { width: min(1160px, calc(100% - 48px)); margin-inline: auto; }
+    .topbar { height: 76px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font-size: 14px; font-weight: 800; letter-spacing: -.03em; }
+    .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--ink); color: var(--green); font-size: 16px; }
+    .top-note { color: var(--muted); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+    .hero { padding: 78px 0 48px; display: grid; grid-template-columns: 1fr 250px; align-items: end; gap: 32px; }
+    .eyebrow { margin: 0 0 20px; color: #526250; font-size: 11px; font-weight: 800; letter-spacing: .15em; text-transform: uppercase; }
+    h1 { max-width: 780px; margin: 0; font: 500 clamp(52px, 8vw, 94px)/.94 var(--serif); letter-spacing: -.065em; }
+    h1 em { color: #557b31; font-weight: 400; }
+    .hero-copy { max-width: 235px; margin: 0 0 6px; color: var(--muted); font-size: 15px; line-height: 1.65; }
+    .hero-copy strong { color: var(--ink); font-weight: 650; }
+    .rule { height: 1px; background: var(--line); }
+    .toolbar { padding: 26px 0 18px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter { border: 1px solid transparent; border-radius: 999px; padding: 9px 14px; background: transparent; color: #5c685f; cursor: pointer; font-size: 13px; transition: background-color .16s ease, color .16s ease, border-color .16s ease; }
+    .filter:hover { border-color: var(--line); color: var(--ink); }
+    .filter[aria-pressed="true"] { background: var(--ink); color: white; }
+    .tools { display: flex; align-items: center; gap: 10px; }
+    .search { position: relative; }
+    .search svg { position: absolute; top: 50%; left: 13px; width: 16px; height: 16px; transform: translateY(-50%); color: #79847a; pointer-events: none; }
+    .search input { width: 205px; height: 41px; padding: 0 14px 0 38px; border: 1px solid var(--line); border-radius: 999px; outline: none; background: #fbfaf6; color: var(--ink); font-size: 13px; }
+    .search input:focus-visible { border-color: #648d3e; box-shadow: 0 0 0 3px rgb(114 157 68 / 18%); }
+    .saved-toggle { height: 41px; display: inline-flex; align-items: center; gap: 7px; padding: 0 13px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink); cursor: pointer; font-size: 13px; white-space: nowrap; }
+    .saved-toggle[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: white; }
+    .saved-toggle svg { width: 15px; height: 15px; }
+    .section-head { display: flex; justify-content: space-between; align-items: baseline; padding: 13px 1px 15px; }
+    .section-head h2 { margin: 0; font: 500 20px var(--serif); letter-spacing: -.025em; }
+    .result-count { color: var(--muted); font-size: 12px; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding-bottom: 84px; }
+    .app-card { min-width: 0; min-height: 220px; display: flex; flex-direction: column; padding: 20px 20px 18px; border: 1px solid var(--line); border-radius: 13px; background: var(--panel); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+    .app-card:hover { transform: translateY(-3px); border-color: #b4c3a8; box-shadow: 0 12px 26px rgb(30 46 34 / 7%); }
+    .card-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 17px; }
+    .app-icon { display: grid; place-items: center; width: 43px; height: 43px; border-radius: 12px; color: #fff; font-size: 13px; font-weight: 800; letter-spacing: -.045em; }
+    .category { padding: 6px 9px; border-radius: 999px; background: #f0f2eb; color: #5a665a; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .app-card h3 { margin: 0 0 7px; font: 600 21px/1.1 var(--serif); letter-spacing: -.03em; }
+    .app-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: auto; padding-top: 20px; }
+    .app-links { display: flex; gap: 14px; }
+    .app-links a { text-decoration: none; color: #4f6d37; font-size: 12px; font-weight: 700; }
+    .app-links a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    .save { width: 32px; height: 32px; display: grid; place-items: center; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: transparent; color: #68756a; cursor: pointer; }
+    .save:hover { border-color: #8fa976; color: var(--green-dark); }
+    .save[aria-pressed="true"] { border-color: var(--green); background: var(--green); color: var(--ink); }
+    .save svg { width: 15px; height: 15px; }
+    .empty { grid-column: 1 / -1; padding: 70px 20px; border: 1px dashed #c4cbbf; border-radius: 13px; text-align: center; color: var(--muted); }
+    .empty strong { display: block; margin-bottom: 8px; color: var(--ink); font: 500 25px var(--serif); }
+    .footer { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 23px 0 30px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .footer p { margin: 0; }
+    .footer a { color: var(--ink); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    :focus-visible { outline: 3px solid #719c47; outline-offset: 3px; }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; gap: 22px; padding-top: 60px; }
+      .hero-copy { max-width: 430px; }
+      .toolbar { align-items: flex-start; flex-direction: column; }
+      .tools { width: 100%; }
+      .search { flex: 1; }
+      .search input { width: 100%; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 540px) {
+      .wrap { width: min(100% - 32px, 1160px); }
+      .topbar { height: 64px; }
+      .top-note { font-size: 10px; }
+      .hero { padding: 49px 0 34px; }
+      h1 { font-size: clamp(53px, 16vw, 76px); }
+      .filters { gap: 4px; }
+      .filter { padding: 8px 11px; font-size: 12px; }
+      .grid { grid-template-columns: 1fr; gap: 10px; padding-bottom: 56px; }
+      .app-card { min-height: 202px; }
+      .footer { align-items: flex-start; flex-direction: column; gap: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="wrap topbar">
+    <a class="brand" href="#top" aria-label="Open Shelf home"><span class="brand-mark" aria-hidden="true">o</span> open shelf</a>
+    <span class="top-note">A small list of good things</span>
+  </header>
+  <main id="top" class="wrap">
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Independent software, thoughtfully made</p>
+        <h1 id="page-title">Good software.<br><em>Open to everyone.</em></h1>
+      </div>
+      <p class="hero-copy"><strong>A personal shelf of open-source apps</strong> that make everyday digital life a little better. Browse around, find a new favorite, make it yours.</p>
+    </section>
+    <div class="rule"></div>
+    <section aria-label="Browse applications">
+      <div class="toolbar">
+        <div class="filters" role="group" aria-label="Filter by category" id="filters"></div>
+        <div class="tools">
+          <label class="search">
+            <span class="sr-only" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0">Search apps</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"></circle><path d="m16 16 4.5 4.5"></path></svg>
+            <input id="search" type="search" placeholder="Find an app…" autocomplete="off">
+          </label>
+          <button class="saved-toggle" id="saved-toggle" type="button" aria-pressed="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 4.8c0-1 1-1.8 2-1.8h8c1.1 0 2 .8 2 1.8V21l-6-4-6 4V4.8Z"></path></svg>
+            Saved <span id="saved-count">0</span>
+          </button>
+        </div>
+      </div>
+      <div class="section-head"><h2 id="list-title">The collection</h2><span class="result-count" id="result-count" aria-live="polite"></span></div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+  <footer class="wrap footer">
+    <p>Made with curiosity, shared with everyone.</p>
+    <p>Know a good one? <a href="https://github.com/">Explore GitHub</a></p>
+  </footer>
+  <script>
+    const apps = [
+      { name: "Blender", tag: "3D & design", mark: "BL", color: "#e87535", desc: "A full creative studio for 3D modeling, animation, and visual effects.", site: "https://www.blender.org/", repo: "https://github.com/blender/blender" },
+      { name: "Krita", tag: "3D & design", mark: "Kr", color: "#45a17c", desc: "A joyful, professional painting app built for illustrators and artists.", site: "https://krita.org/", repo: "https://github.com/KDE/krita" },
+      { name: "GIMP", tag: "3D & design", mark: "Gi", color: "#716141", desc: "A powerful image editor for retouching, compositing, and creative work.", site: "https://www.gimp.org/", repo: "https://gitlab.gnome.org/GNOME/gimp" },
+      { name: "Inkscape", tag: "3D & design", mark: "In", color: "#536d9b", desc: "Vector illustration and design, from quick sketches to polished artwork.", site: "https://inkscape.org/", repo: "https://gitlab.com/inkscape/inkscape" },
+      { name: "OBS Studio", tag: "Video & audio", mark: "OBS", color: "#262626", desc: "Record your screen and create live streams with a flexible studio setup.", site: "https://obsproject.com/", repo: "https://github.com/obsproject/obs-studio" },
+      { name: "VLC", tag: "Video & audio", mark: "VLC", color: "#e8a522", desc: "A dependable media player that plays just about anything you throw at it.", site: "https://www.videolan.org/vlc/", repo: "https://code.videolan.org/videolan/vlc" },
+      { name: "Audacity", tag: "Video & audio", mark: "Au", color: "#327ec1", desc: "Record, edit, and shape audio with a capable multitrack workstation.", site: "https://www.audacityteam.org/", repo: "https://github.com/audacity/audacity" },
+      { name: "LibreOffice", tag: "Get things done", mark: "LO", color: "#2477b4", desc: "A complete office suite for documents, spreadsheets, and presentations.", site: "https://www.libreoffice.org/", repo: "https://github.com/LibreOffice/core" },
+      { name: "Thunderbird", tag: "Get things done", mark: "Tb", color: "#5684d8", desc: "Keep email, calendars, and contacts together in one open-source app.", site: "https://www.thunderbird.net/", repo: "https://github.com/mozilla/releases-comm-central" },
+      { name: "Joplin", tag: "Get things done", mark: "Jo", color: "#5574ad", desc: "Take notes, organize ideas, and keep your notebooks synced across devices.", site: "https://joplinapp.org/", repo: "https://github.com/laurent22/joplin" },
+      { name: "KeePassXC", tag: "Privacy & security", mark: "KX", color: "#3c7d58", desc: "Keep passwords in an encrypted vault that stays under your control.", site: "https://keepassxc.org/", repo: "https://github.com/keepassxreboot/keepassxc" },
+      { name: "LocalSend", tag: "Privacy & security", mark: "LS", color: "#8159bc", desc: "Send files to nearby devices over your local network, without an account.", site: "https://localsend.org/", repo: "https://github.com/localsend/localsend" },
+      { name: "Signal", tag: "Privacy & security", mark: "Si", color: "#3a76dc", desc: "Private messaging and calls, backed by open-source client apps.", site: "https://signal.org/", repo: "https://github.com/signalapp/Signal-Desktop" },
+      { name: "Element", tag: "Privacy & security", mark: "El", color: "#5d46c5", desc: "A chat app for open, decentralized communication on Matrix.", site: "https://element.io/", repo: "https://github.com/element-hq/element-web" },
+      { name: "Godot", tag: "Play & create", mark: "Go", color: "#478fd1", desc: "A friendly game engine for making 2D and 3D games on your terms.", site: "https://godotengine.org/", repo: "https://github.com/godotengine/godot" },
+      { name: "OpenTTD", tag: "Play & create", mark: "OT", color: "#568c42", desc: "Build a transport empire in this open-source classic strategy game.", site: "https://www.openttd.org/", repo: "https://github.com/OpenTTD/OpenTTD" },
+      { name: "Kdenlive", tag: "Video & audio", mark: "Kd", color: "#5b70cf", desc: "A flexible video editor for everything from quick cuts to polished films.", site: "https://kdenlive.org/", repo: "https://invent.kde.org/multimedia/kdenlive" },
+      { name: "Penpot", tag: "3D & design", mark: "Pe", color: "#e95842", desc: "Design interfaces and prototypes together with an open design platform.", site: "https://penpot.app/", repo: "https://github.com/penpot/penpot" }
+    ];
+    const categories = ["All apps", ...new Set(apps.map(app => app.tag))];
+    const bookmarkIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 4.8c0-1 1-1.8 2-1.8h8c1.1 0 2 .8 2 1.8V21l-6-4-6 4V4.8Z"></path></svg>';
+    const filters = document.querySelector("#filters");
+    const grid = document.querySelector("#grid");
+    const search = document.querySelector("#search");
+    const savedToggle = document.querySelector("#saved-toggle");
+    const savedCount = document.querySelector("#saved-count");
+    let activeCategory = "All apps";
+    let savedOnly = false;
+    let saved = new Set();
+    try { saved = new Set(JSON.parse(localStorage.getItem("open-shelf-saved") || "[]")); } catch { saved = new Set(); }
+
+    categories.forEach((category, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "filter";
+      button.textContent = category;
+      button.setAttribute("aria-pressed", String(index === 0));
+      button.addEventListener("click", () => {
+        activeCategory = category;
+        filters.querySelectorAll("button").forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+        render();
+      });
+      filters.append(button);
+    });
+
+    function render() {
+      const query = search.value.trim().toLowerCase();
+      const visible = apps.filter(app => (activeCategory === "All apps" || app.tag === activeCategory)
+        && (!savedOnly || saved.has(app.name))
+        && (!query || `${app.name} ${app.tag} ${app.desc}`.toLowerCase().includes(query)));
+      grid.replaceChildren();
+      document.querySelector("#list-title").textContent = savedOnly ? "Your saved apps" : activeCategory === "All apps" ? "The collection" : activeCategory;
+      document.querySelector("#result-count").textContent = `${visible.length} ${visible.length === 1 ? "app" : "apps"}`;
+      savedCount.textContent = saved.size;
+      if (!visible.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.innerHTML = "<strong>Nothing on this shelf yet.</strong>Try another search or category.";
+        grid.append(empty);
+        return;
+      }
+      visible.forEach(app => {
+        const article = document.createElement("article");
+        article.className = "app-card";
+        const top = document.createElement("div");
+        top.className = "card-top";
+        const icon = document.createElement("span");
+        icon.className = "app-icon";
+        icon.textContent = app.mark;
+        icon.style.background = app.color;
+        icon.setAttribute("aria-hidden", "true");
+        const category = document.createElement("span");
+        category.className = "category";
+        category.textContent = app.tag;
+        top.append(icon, category);
+        const heading = document.createElement("h3");
+        heading.textContent = app.name;
+        const description = document.createElement("p");
+        description.textContent = app.desc;
+        const bottom = document.createElement("div");
+        bottom.className = "card-bottom";
+        const links = document.createElement("div");
+        links.className = "app-links";
+        [["Website", app.site], ["Source code", app.repo]].forEach(([label, url]) => {
+          const link = document.createElement("a");
+          link.href = url;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          link.textContent = label;
+          links.append(link);
+        });
+        const saveButton = document.createElement("button");
+        saveButton.type = "button";
+        saveButton.className = "save";
+        saveButton.innerHTML = bookmarkIcon;
+        saveButton.setAttribute("aria-label", `${saved.has(app.name) ? "Remove" : "Save"} ${app.name} ${saved.has(app.name) ? "from" : "to"} saved apps`);
+        saveButton.setAttribute("aria-pressed", String(saved.has(app.name)));
+        saveButton.addEventListener("click", () => {
+          saved.has(app.name) ? saved.delete(app.name) : saved.add(app.name);
+          try { localStorage.setItem("open-shelf-saved", JSON.stringify([...saved])); } catch { /* Saving still works until this page is closed. */ }
+          render();
+        });
+        bottom.append(links, saveButton);
+        article.append(top, heading, description, bottom);
+        grid.append(article);
+      });
+    }
+    search.addEventListener("input", render);
+    savedToggle.addEventListener("click", () => {
+      savedOnly = !savedOnly;
+      savedToggle.setAttribute("aria-pressed", String(savedOnly));
+      render();
+    });
+    render();
+  </script>
+</body>
+</html>
